@@ -1,18 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
+#include "serveur.h"
 
-int main(void) {
-	printf("00\n");
-	fflush(stdout);
-	double a;
-	int b;
+void serveur() {
 	int sock, client, conn;
 	socklen_t clientsize;
 	char buffer[100];
@@ -21,35 +9,31 @@ int main(void) {
 	sock = socket(AF_INET, SOCK_STREAM, 0);
 
 	bzero(&adr, sizeof(adr));
-	printf("10");
-	fflush(stdout);
-	//b = scanf("%lf", &a);
+	
 	adr.sin_family = AF_INET;
 	adr.sin_addr.s_addr = htons(INADDR_ANY);
 	adr.sin_port = htons(7777);
 
 	bind(sock,(struct sockaddr*) &adr, sizeof(adr));
 
-	listen(sock, 2);
-	printf("After Listen\n");
-	fflush(stdout);
+
+	// listen(sock, 2);
+	listen(sock, 10);
+	
 	printf("%lu\n",sizeof(adr));
 	fflush(stdout);
-	printf("Adter ClientSize");
-	fflush(stdout);
+	clientsize = sizeof(adr);
+	
+	
 	int x = 0;
 	int all_socket[50];
 	fd_set rdfs;
 	int sockmax=sock+1;
-	printf("Just Before While");
-	fflush(stdout);
+	
 
 	while(1){
 		
 		// vide tous les sockets qu'on veut ecouter
-		printf("Before FD_ZERO");
-		fflush(stdout);
-
 		FD_ZERO(& rdfs);
 		FD_SET(sock, &rdfs);
 		// rajoute connection de all_socket vers rdfs
@@ -86,6 +70,9 @@ int main(void) {
 			fflush(stdout);
 			write(client,buffer,100);
 		}
+
+		//gestion de la fermeture
+		// TODO use shotdown(fd, howto) // mettre flag 
 	}
 	printf("Adfter While");
 	fflush(stdout);

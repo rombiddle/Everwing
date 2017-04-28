@@ -30,5 +30,4 @@ int main(void) {
 		printf("message du serveur : %s\n", buffer);
 	}
 
-
 }
