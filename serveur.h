@@ -13,6 +13,7 @@
 
 /* Prototypes for the functions */
 /* Sums two ints */
-void serveur();
+void serveur(int sock, socklen_t clientsize, char buffer[]);
+void serveurTest();
 
 #endif

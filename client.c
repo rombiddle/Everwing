@@ -8,7 +8,9 @@
 #include <sys/socket.h>
 
 int main(void) {
-	printf("00");
+	printf("Start Client\n");
+	fflush(stdout);
+
 	int sock, conn;
 	char buffer[100];
 	struct sockaddr_in adr; 
@@ -24,10 +26,16 @@ int main(void) {
 
 	conn = connect(sock,(struct sockaddr*) &adr, sizeof(adr));
 
-	while(1){
-		write(sock, "Hello",5);
+	write(sock, "Hello",5);
 		read(sock, buffer,100);
 		printf("message du serveur : %s\n", buffer);
-	}
+		fflush(stdout);
+
+	// while(1){
+	// 	write(sock, "Hello",5);
+	// 	read(sock, buffer,100);
+	// 	printf("message du serveur : %s\n", buffer);
+	// 	fflush(stdout);
+	// }
 
 }

@@ -1,10 +1,10 @@
 #include "serveur.h"
 
-void serveur(int sock, socklen_t clientsize, char buffer[]) {
-	// int sock, client, conn;
-	// socklen_t clientsize;
-	// char buffer[100];
-	// struct sockaddr_in adr, cli_adr;
+void serveurTest(int sockM) {
+	int sock = sockM, client, conn;
+	socklen_t clientsize;
+	char buffer[100];
+	struct sockaddr_in cli_adr;
 
 	// sock = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -17,19 +17,19 @@ void serveur(int sock, socklen_t clientsize, char buffer[]) {
 	// bind(sock,(struct sockaddr*) &adr, sizeof(adr));
 
 
-	// // listen(sock, 2);
+	// //listen(sock, 2);
 	// listen(sock, 10);
 	
-	// printf("%lu\n",sizeof(adr));
-	// fflush(stdout);
+	// // printf("%lu\n",sizeof(adr));
+	// // fflush(stdout);
+
 	// clientsize = sizeof(adr);
 	
 	
-	int x = 0, client, conn;
+	int x = 0;
 	int all_socket[50];
 	fd_set rdfs;
 	int sockmax=sock+1;
-	struct sockaddr_in cli_adr;
 
 	printf("Nouveau serveur \n");
 	fflush(stdout);
@@ -45,6 +45,7 @@ void serveur(int sock, socklen_t clientsize, char buffer[]) {
 		for(int i = 0; i < x; i++){
 			FD_SET(all_socket[i], &rdfs);
 		}
+		
 
 		// attends pour nouvelle connexion ou qu'il se passe quelquechose sur une connexion actuelle
 		printf("Before Select\n");
@@ -53,26 +54,29 @@ void serveur(int sock, socklen_t clientsize, char buffer[]) {
 			printf("error select");
 			fflush(stdout);
 		}
-		printf("After Select and Before Ajout Client\n");
+		printf("After Select and Before Ajout Client.\n");
 		fflush(stdout);
 		// ajoute connexion
-		if(FD_ISSET(all_socket[0], &rdfs)){
-			printf("New Client Connected. \n");
+		if(FD_ISSET(sock, &rdfs)){
+			printf("isset entered\n");
 			fflush(stdout);
 			client = accept(sock, (struct sockaddr*) &cli_adr, &clientsize);
 			all_socket[x] = client;
 			sockmax = conn + 1;
+			printf("New Client Connected. \n");
+			fflush(stdout);
 			x++;
 		}
 		printf("After Ajout Client And Before traitement\n");
 		fflush(stdout);
 		// traitement
-		for(int i = 1; i < x; i++){
+		for(int i = 0; i < x; i++){
 			// == connfd modification lecture
 			conn = read(client, buffer, 100);		
 			printf("message récupérer : %s\n ",buffer);
-			write(client,buffer,100);
 			fflush(stdout);
+			write(client,buffer,100);
+			
 		}
 
 		printf("After traitement\n");
