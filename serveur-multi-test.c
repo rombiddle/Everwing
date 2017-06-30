@@ -2,6 +2,8 @@
 
 void serveurTest(int sockM) {
 	int sock = sockM, client, conn;
+	printf("sock = %d \n", sock);
+	fflush(stdout);
 	socklen_t clientsize;
 	char buffer[100];
 	struct sockaddr_in cli_adr;
@@ -40,7 +42,7 @@ void serveurTest(int sockM) {
 		FD_ZERO(& rdfs);
 		FD_SET(sock, &rdfs);
 		// rajoute connection de all_socket vers rdfs
-		printf("After FD_ZERO\n");
+		printf("%d After FD_ZERO\n", getpid());
 		fflush(stdout);
 		for(int i = 0; i < x; i++){
 			FD_SET(all_socket[i], &rdfs);
@@ -48,13 +50,13 @@ void serveurTest(int sockM) {
 		
 
 		// attends pour nouvelle connexion ou qu'il se passe quelquechose sur une connexion actuelle
-		printf("Before Select\n");
+		printf("%d Before Select\n", getpid());
 		fflush(stdout);
 		if(select(sockmax, &rdfs, NULL, NULL, NULL) == -1){
 			printf("error select");
 			fflush(stdout);
 		}
-		printf("After Select and Before Ajout Client.\n");
+		printf("%d After Select and Before Ajout Client.\n", getpid());
 		fflush(stdout);
 		// ajoute connexion
 		if(FD_ISSET(sock, &rdfs)){
@@ -67,22 +69,26 @@ void serveurTest(int sockM) {
 			fflush(stdout);
 			x++;
 		}
-		printf("After Ajout Client And Before traitement\n");
+		printf("%d After Ajout Client And Before traitement\n", getpid());
 		fflush(stdout);
 		// traitement
 		for(int i = 0; i < x; i++){
 			// == connfd modification lecture
 			conn = read(client, buffer, 100);		
-			printf("message récupérer : %s\n ",buffer);
+			printf("%d message récupérer : %s\n", getpid(),buffer);
 			fflush(stdout);
 			write(client,buffer,100);
 			
 		}
 
-		printf("After traitement\n");
+		printf("%d After traitement\n", getpid());
 		fflush(stdout);
 
 		//gestion de la fermeture
+		if(shutdown(all_socket[x-1], SHUT_RDWR) == -1){
+			printf("error close");
+			fflush(stdout);
+		}
 		// TODO use shotdown(fd, howto) // mettre flag 
 	}
 	printf("Adfter While \n");

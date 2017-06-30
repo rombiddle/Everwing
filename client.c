@@ -8,7 +8,7 @@
 #include <sys/socket.h>
 
 int main(void) {
-	printf("Start Client\n");
+	printf("Start Client2\n");
 	fflush(stdout);
 
 	int sock, conn;

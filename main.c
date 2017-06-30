@@ -4,6 +4,10 @@
 	gcc -Wall main.c serveur-multi2.c -o serveur-multi2
 	execute :
 	./serveur-multi2
+
+	debugage serveru-multi2
+	ps -ef | grep serveur-multi2
+	kill -9 PID
 */
 
 int main(void)
@@ -12,7 +16,6 @@ int main(void)
 	//TODO init listen et bind
 	int sock;
 	socklen_t clientsize;
-	char buffer[100];
 	struct sockaddr_in adr;
 
 	sock = socket(AF_INET, SOCK_STREAM, 0);
